@@ -1,10 +1,10 @@
 import os,sys
 
-from serverfeed.larcvserverclient import LArCVServerClient
-
 from larcv import larcv
 from ROOT import Long
 import cv2 as cv
+
+from serverfeed.larcvserver import LArCVServerClient
 
 client = LArCVServerClient( 0, "ipc:///tmp/feedtest/" )
 
@@ -51,7 +51,6 @@ while more:
     io.save_entry()    
     if data["entry"][0,0,0,0]+1==data["entry"][0,0,0,1]:
         more = False
-    break    
 
 
 io.finalize()

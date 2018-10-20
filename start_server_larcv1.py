@@ -63,13 +63,9 @@ if __name__ == "__main__":
     inputfile = "../../nutufts/larflow/testdata/larcv1_data/larcv_wholeview_2e59dbd4-a395-4296-8d81-f84c4a7e474b.root"
     feeder = LArCVServer(batchsize,"test",load_data_larcv1,inputfile,nworkers,server_verbosity=0,worker_verbosity=0,queuesize=1,randomaccess=False)
 
-    print "wait for workers to load up"
-    twait = 3
-    while twait>0:
-        time.sleep(0.5)
-        twait -= 1
-        print "twait: ",twait
-
-    print "ready"
+    print "Server Started"
+    while True:
+        time.sleep(1)
+        
+    print "server stopped"
     
-    raw_input()
