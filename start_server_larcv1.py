@@ -59,6 +59,7 @@ if __name__ == "__main__":
     batchsize = 1
     nworkers  = 1
     print "start feeders"
+    #inputfile = "larcv1_larflow_y2u_bnbext_mcc9.root"
     #inputfile = "larcv1_larflow_y2v_bnbext_mcc9.root"
     inputfile = "../../nutufts/larflow/testdata/larcv1_data/larcv_wholeview_2e59dbd4-a395-4296-8d81-f84c4a7e474b.root"
     feeder = LArCVServer(batchsize,"test",load_data_larcv1,inputfile,nworkers,server_verbosity=0,worker_verbosity=0,queuesize=1,randomaccess=False)

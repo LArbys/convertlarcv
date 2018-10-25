@@ -4,6 +4,8 @@ from larcv import larcv
 from ROOT import Long
 import cv2 as cv
 
+import numpy as np
+
 from serverfeed.larcvserver import LArCVServerClient
 
 client = LArCVServerClient( 0, "ipc:///tmp/feedtest/" )
@@ -43,8 +45,10 @@ while more:
             planeid = Long( meta_np[0,i,0,6] )
             
             lcvmeta = larcv.ImageMeta( meta_np[0,i,0,2], meta_np[0,i,0,3], meta_np[0,i,0,4], meta_np[0,i,0,5], nrows, ncols, planeid  )
-            # convert image            
-            lcvimg = larcv.as_image2d_meta( arr[0,i,:,:].transpose((1,0)), lcvmeta )
+            # convert image
+            outarr = np.flip( arr[0,i,:,:].transpose((1,0)), 0 )
+            print outarr.shape
+            lcvimg = larcv.as_image2d_meta( outarr , lcvmeta )
             evout.append( lcvimg )
     #cv.imwrite("entry_%d_adc.png"%(data["entry"][0,0,0,0]),data["adc"][0,1,:,:])
             

@@ -13,8 +13,8 @@ if __name__ == "__main__":
     p.daemon = True
     p.start()
 
-    print "Wait 10 seconds"
-    time.sleep(10)
+    print "Wait 3 seconds"
+    time.sleep(3)
 
     print "larcv2 client"
     os.system("./run_larcv2_client.sh {}".format(repodir))
