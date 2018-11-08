@@ -3,8 +3,7 @@
 workdir=$PWD
 repodir=$1
 
-# needed for meitner
-#source /usr/local/bin/thisroot.sh
+source /usr/local/bin/thisroot.sh
 
 cd $repodir/larlite
 source config/setup.sh
@@ -12,9 +11,6 @@ source config/setup.sh
 cd $repodir/larcv1
 source configure.sh
 
-cd $repodir/serverfeed
-source setenv.sh
-
 cd $workdir
 
-python start_server_larcv1.py
+python load_data_larcv1.py ${@:2}

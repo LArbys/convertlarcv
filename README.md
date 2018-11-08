@@ -38,5 +38,9 @@ Next we need to build `larlite`, `larcv1`, `larcv2`.
 
   This script just runs the server and client scripts.
 
+## Tests
 
+Tests of the conversion processes are done with the following scripts
+
+* `run_test_larcv1.py`: calls `test_larcv1.sh`. Have to have a second wrapper in order to create a subprocess that won't set the shell environment permanently
 
