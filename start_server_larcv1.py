@@ -4,9 +4,8 @@ from serverfeed.larcvserver import LArCVServer
 from serverfeed.loaderfunction import LoaderFunction
 
 class LoadLArCV1(LoaderFunction):
-    def __init__(self,productdict):
-        super(LoadLArCV1,self).__init__()
-        self.productdict = productdict
+    def __init__(self,productlist):
+        self.productlist = productlist
         
     def loadevent( self, io ):
         """ example of data loader function. we provide dictionary with numpy arrays (no batch) """
@@ -14,7 +13,7 @@ class LoadLArCV1(LoaderFunction):
         import numpy as np
         from load_data_larcv1 import load_data_larcv1        
 
-        data = load_data_larcv1( io, self.productdict )
+        data = load_data_larcv1( io, self.productlist )
         
         data["rse"] = np.zeros( (3),dtype=np.int )
         evid = io.event_id()
@@ -44,11 +43,9 @@ if __name__ == "__main__":
     inputfile = sys.argv[1]
     productlist = sys.argv[2:]
 
-    productdict = {}
-    for arg in produclist:
-        productdict[ arg.split(":")[0] ] = arg.split(":")[-1]
+    print "LArCV1 Server: productdict=",productlist
     
-    feeder = LArCVServer(batchsize,"test",LoaderFunction(productdict),inputfile,nworkers,server_verbosity=0,worker_verbosity=0,queuesize=1,randomaccess=False)
+    feeder = LArCVServer(batchsize,"test",LoadLArCV1(productlist),inputfile,nworkers,server_verbosity=0,worker_verbosity=0,queuesize=1,randomaccess=False)
 
     print "Server Started"
     while True:

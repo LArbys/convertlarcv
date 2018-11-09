@@ -30,7 +30,7 @@ class LArCVServerWorker( WorkerService ):
         self.current_idx = 0
         self.randomaccess = randomaccess
         self.load_func = load_func
-        if not callable(self.load_func):
+        if not callable(self.load_func.loadevent):
             raise ValueError("'load_func' argument needs to be a function returning a dict of numpy arrays")
         print "LArCVServerWorker[{}] is loaded.".format(self._identity)
         
@@ -62,7 +62,7 @@ class LArCVServerWorker( WorkerService ):
         keylist = None
         for ib,idx in enumerate(indices):
             self.io.read_entry(idx)
-            batch.append( self.load_func( self.io ) )
+            batch.append( self.load_func.loadevent( self.io ) )
             if keylist is None:
                 keylist = batch[-1].keys()
 

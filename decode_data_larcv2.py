@@ -27,10 +27,13 @@ def decode_larcv2_evimage2d( io, producername, imgdata_np, imgmeta_np ):
     return
 
 def decode_larcv2_evstatus( io, producername, evstatus_np ):
-
+    shape = evstatus_np.shape
+    evstatus_np = evstatus_np.reshape( (shape[2],shape[3]) )
     evout = io.get_data("chstatus", producername)
-    for p in xrange(3):
-        evout.insert( evout.status(p) )
+    nchs = evstatus_np.shape[0]
+    evstatus_lcv = larcv.as_eventchstatus( evstatus_np )
+    for p in xrange(nchs):
+        evout.insert( evstatus_lcv.status(p) )
 
     return
     
@@ -44,21 +47,27 @@ def decode_larcv2_productdict( io, datadict ):
 
     # collect image components, store other products
     for dataname,obj in datadict.items():
+        print "decode ",dataname,":",type(obj),
+        if type(obj) is np.ndarray:
+            print obj.shape
+        else:
+            print
+            
         name = dataname.split("_")[0].strip()
-        producername = dataname.split("_")[1].strip()
+        producername = dataname.split("_")[-1].strip()
         if "image2d" in name or "imagemeta" in name:
             if producername not in img2dict:
                 img2dict[producername] = {"image2d":None,"imagemeta":None}
             if "image2d" in name:
-                img2dict[produername]["image2d"] = obj
+                img2dict[producername]["image2d"] = obj
             elif "imagemeta" in name:
-                img2dict[produername]["imagemeta"] = obj
+                img2dict[producername]["imagemeta"] = obj
 
         elif "chstatus" in name:
-            decode_larcv2_productdict( io, producername, obj )
+            decode_larcv2_evstatus( io, producername, obj )
 
     # now process the images
-    for producer,arrays in img2dict:
+    for producer,arrays in img2dict.items():
         decode_larcv2_evimage2d( io, producer, arrays["image2d"], arrays["imagemeta"]  )
 
     return

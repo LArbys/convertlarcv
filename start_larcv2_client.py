@@ -22,7 +22,7 @@ while more:
         break
     data = client.products
     for d,a in data.items():
-        print d,a.shape
+        print d,type(a)
     rse = data["rse"].reshape( (3) )
     io.set_id( rse[0], rse[1], rse[2] )
     print "saving entry: ",data["entry"][0,0,0,0]," of ",data["entry"][0,0,0,1],". RSE=",rse

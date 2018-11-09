@@ -20,9 +20,12 @@ if __name__ == "__main__":
         if n+1<len(productlist):
             productargs += " "
 
+    print "CONVERTING: ",filename
+    print "PRODUCT LIST: ",productargs
+
     someid = 0
     repodir = os.getcwd()
-    p = mp.Process(target=larcv1_server,args=(someid,repodir,productargs))
+    p = mp.Process(target=larcv1_server,args=(someid,repodir,filename,productargs))
     p.daemon = True
     p.start()
 

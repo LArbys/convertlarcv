@@ -14,6 +14,9 @@ def convert_image2d( producername, evimage2d ):
     # ------
     # dictionary with data in it
 
+    import ROOT
+    from larcv import larcv    
+
     meta  = evimage2d.Image2DArray().front().meta()
     nimgs = evimage2d.Image2DArray().size()
     imgdata_np = np.zeros( (nimgs,meta.cols(),meta.rows()), dtype=np.float32 )
@@ -34,23 +37,30 @@ def convert_image2d( producername, evimage2d ):
     data = {}
     data["image2d_%s"%(producername)]   = imgdata_np
     data["imagemeta_%s"%(producername)] = imgmeta_np
-
+    print "convert image2d: producer=",producername
     return data
 
 def convert_chstatus( producername, evchstatus ):
+    import ROOT
+    from larcv import larcv
 
     status_np = larcv.as_ndarray( evchstatus )
     data = {"chstatus_%s"%(producername):status_np}
-
+    print "convert chstatus: producer=",producername
     return data
 
-def load_data_larcv1( io, product_dict ):
+def load_data_larcv1( io, product_list ):
+    import ROOT
+    from larcv import larcv
+    
     # input
     # -----
     # product_dict: expects to be a dictionary with producer name as key and data type as value
 
     data = {}
-    for ktype,vproducer in product_dict.items():
+    for productname in product_list:
+        vproducer = productname.split(":")[-1].strip()
+        ktype = productname.split(":")[0].strip()
         if ktype=="image2d":
             products = convert_image2d(  vproducer, io.get_data( larcv.kProductImage2D,  vproducer ) )
         elif ktype=="chstatus":
