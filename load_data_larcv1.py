@@ -50,11 +50,11 @@ def load_data_larcv1( io, product_dict ):
     # product_dict: expects to be a dictionary with producer name as key and data type as value
 
     data = {}
-    for k,v in product_dict.items():
-        if k=="image2d":
-            products = convert_image2d(  v, io.get_data( larcv.kProductImage2D, v ) )
-        elif k=="chstatus":
-            products = convert_chstatus( v, io.get_data( larcv.kProductChStatus, v ) )
+    for ktype,vproducer in product_dict.items():
+        if ktype=="image2d":
+            products = convert_image2d(  vproducer, io.get_data( larcv.kProductImage2D,  vproducer ) )
+        elif ktype=="chstatus":
+            products = convert_chstatus( vproducer, io.get_data( larcv.kProductChStatus, vproducer ) )
         else:
             raise RuntimeError("Unrecognized product type")
 
@@ -87,8 +87,8 @@ if __name__ == "__main__":
         data = load_data_larcv1( io, product_dict )
 
         print "[ENTRY %d]"%(ientry)
-        for k,v in data.items():
-            print "  ",k,v.shape
+        for kproducer,arr in data.items():
+            print "  ",kproducer,arr.shape
 
         # compare
         evchstatus = io.get_data( larcv.kProductChStatus, "wire" )

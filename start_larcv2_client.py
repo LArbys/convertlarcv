@@ -7,6 +7,7 @@ import cv2 as cv
 import numpy as np
 
 from serverfeed.larcvserver import LArCVServerClient
+from decode_data_larcv2 import decode_larcv2_productdict
 
 client = LArCVServerClient( 0, "ipc:///tmp/feedtest/" )
 
@@ -20,38 +21,12 @@ while more:
     if not ok:
         break
     data = client.products
+    for d,a in data.items():
+        print d,a.shape
     rse = data["rse"].reshape( (3) )
     io.set_id( rse[0], rse[1], rse[2] )
     print "saving entry: ",data["entry"][0,0,0,0]," of ",data["entry"][0,0,0,1],". RSE=",rse
-    
-    for name,arr in data.items():
-        print " processing ",name
-        if "meta" in name:
-            continue
-        if name in ["entry","rse","feeder"]:
-            continue
-        # should be image array
-        meta_np = data["%s_meta"%(name)]
-
-        # make evcontainer
-        evout = io.get_data("image2d", name )
-
-        # make meta
-        nimgs = arr.shape[1]
-        print arr.shape
-        for i in xrange( nimgs ):
-            nrows = Long( meta_np[0,i,0,1] )
-            ncols = Long( meta_np[0,i,0,0] )
-            planeid = Long( meta_np[0,i,0,6] )
-            
-            lcvmeta = larcv.ImageMeta( meta_np[0,i,0,2], meta_np[0,i,0,3], meta_np[0,i,0,4], meta_np[0,i,0,5], nrows, ncols, planeid  )
-            # convert image
-            outarr = np.flip( arr[0,i,:,:].transpose((1,0)), 0 )
-            print outarr.shape
-            lcvimg = larcv.as_image2d_meta( outarr , lcvmeta )
-            evout.append( lcvimg )
-    #cv.imwrite("entry_%d_adc.png"%(data["entry"][0,0,0,0]),data["adc"][0,1,:,:])
-            
+    decode_larcv2_productdict( io, data )
     io.save_entry()    
     if data["entry"][0,0,0,0]+1==data["entry"][0,0,0,1]:
         more = False
