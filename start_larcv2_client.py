@@ -2,7 +2,6 @@ import os,sys
 
 from larcv import larcv
 from ROOT import Long
-import cv2 as cv
 
 import numpy as np
 
