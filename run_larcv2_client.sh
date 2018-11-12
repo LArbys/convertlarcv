@@ -2,6 +2,7 @@
 
 workdir=$PWD
 repodir=$1
+output=$2
 
 cd $repodir/larlite
 source config/setup.sh
@@ -14,4 +15,4 @@ source setenv.sh
 
 cd $workdir
 
-python start_larcv2_client.py
+python start_larcv2_client.py $2

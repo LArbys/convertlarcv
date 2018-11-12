@@ -41,11 +41,12 @@ if __name__ == "__main__":
     #inputfile = "larcv1_larflow_y2v_bnbext_mcc9.root"
     #inputfile = "../../nutufts/larflow/testdata/larcv1_data/larcv_wholeview_2e59dbd4-a395-4296-8d81-f84c4a7e474b.root"
     inputfile = sys.argv[1]
-    productlist = sys.argv[2:]
+    feedname  = sys.argv[2]
+    productlist = sys.argv[3:]
 
     print "LArCV1 Server: productdict=",productlist
     
-    feeder = LArCVServer(batchsize,"test",LoadLArCV1(productlist),inputfile,nworkers,server_verbosity=0,worker_verbosity=0,queuesize=1,randomaccess=False)
+    feeder = LArCVServer(batchsize,feedname,LoadLArCV1(productlist),inputfile,nworkers,server_verbosity=0,worker_verbosity=0,queuesize=1,randomaccess=False)
 
     print "Server Started"
     while True:

@@ -8,10 +8,15 @@ import numpy as np
 from serverfeed.larcvserver import LArCVServerClient
 from decode_data_larcv2 import decode_larcv2_productdict
 
-client = LArCVServerClient( 0, "ipc:///tmp/feedtest/" )
+output = sys.argv[1]
+jobtag="test"
+if len(sys.argv)==3:
+    jobtag=sys.argv[2]
+
+client = LArCVServerClient( 0, "ipc:///tmp/feed{}/".format(jobtag) )
 
 io = larcv.IOManager(larcv.IOManager.kWRITE)
-io.set_out_file("output_whole_view.root")
+io.set_out_file(output)
 io.initialize()
     
 more = True

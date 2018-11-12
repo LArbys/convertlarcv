@@ -1,8 +1,10 @@
+#!/usr/bin/env python
+
 import os,sys,time
 import multiprocessing as mp
 
-def larcv1_server(someid,repodir,filename,productargs):
-    os.system("./run_larcv1_server.sh {} {} {}".format(repodir,filename,productargs))
+def larcv1_server(someid,repodir,filename,feedname,productargs):
+    os.system("./run_larcv1_server.sh {} {} {} {}".format(repodir,filename,feedname,productargs))
 
 
 if __name__ == "__main__":
@@ -12,7 +14,9 @@ if __name__ == "__main__":
         print "PRODUCT_NAME_LIST, pairs of [type]:[producername] e.g.  image2d:wire image2d:segment chstatus:wire ..."
         
     filename    = sys.argv[1]
-    productlist = sys.argv[2:]
+    output      = sys.argv[2]
+    feedname    = sys.argv[3]
+    productlist = sys.argv[4:]
     
     productargs = ""
     for n,p in enumerate(productlist):
@@ -25,7 +29,7 @@ if __name__ == "__main__":
 
     someid = 0
     repodir = os.getcwd()
-    p = mp.Process(target=larcv1_server,args=(someid,repodir,filename,productargs))
+    p = mp.Process(target=larcv1_server,args=(someid,repodir,filename,feedname,productargs))
     p.daemon = True
     p.start()
 
@@ -33,7 +37,7 @@ if __name__ == "__main__":
     time.sleep(3)
 
     print "larcv2 client"
-    os.system("./run_larcv2_client.sh {}".format(repodir))
+    os.system("./run_larcv2_client.sh {} {} {}".format(repodir,output,feedname))
     
     print "DONE"
     
