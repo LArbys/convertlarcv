@@ -14,6 +14,7 @@ if len(sys.argv)==3:
     jobtag=sys.argv[2]
 
 client = LArCVServerClient( 0, "ipc:///tmp/feed{}/".format(jobtag) )
+print "client connecting to: ","ipc:///tmp/feed{}/".format(jobtag)
 
 io = larcv.IOManager(larcv.IOManager.kWRITE)
 io.set_out_file(output)
